@@ -1,4 +1,4 @@
-module github.com/fyn.xiu/bgo
+module github.com/fynxiu/bgo
 
 go 1.17
 
