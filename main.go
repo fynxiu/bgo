@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/fyn.xiu/bgo/project"
-	"github.com/fyn.xiu/bgo/upgrade"
+	"github.com/fynxiu/bgo/project"
+	"github.com/fynxiu/bgo/upgrade"
 )
 
 const version = "0.0.1"

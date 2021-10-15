@@ -8,8 +8,8 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/fatih/color"
 
-	"github.com/fyn.xiu/bgo/internal/fs"
-	"github.com/fyn.xiu/bgo/internal/repo"
+	"github.com/fynxiu/bgo/internal/fs"
+	"github.com/fynxiu/bgo/internal/repo"
 )
 
 // Project is a project template.

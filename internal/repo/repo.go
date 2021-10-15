@@ -6,8 +6,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/fyn.xiu/bgo/internal/fs"
-	"github.com/fyn.xiu/bgo/internal/gomod"
+	"github.com/fynxiu/bgo/internal/fs"
+	"github.com/fynxiu/bgo/internal/gomod"
 )
 
 // Repo is git repository manager.

@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/fyn.xiu/bgo/internal/goexec"
+	"github.com/fynxiu/bgo/internal/goexec"
 )
 
 // CmdUpgrade represents the upgrade command.
@@ -19,7 +19,7 @@ var CmdUpgrade = &cobra.Command{
 // Run upgrade the bgo tools.
 func Run(_ *cobra.Command, _ []string) {
 	err := goexec.Install(
-		"github.com/fyn.xiu/bgo",
+		"github.com/fynxiu/bgo",
 	)
 	if err != nil {
 		fmt.Println(err)
