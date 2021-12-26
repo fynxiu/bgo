@@ -29,7 +29,7 @@ func New(url string, branch string) *Repo {
 	end := strings.LastIndex(url, "/")
 	return &Repo{
 		url:    url,
-		home:   fs.BgoHomeWithDir("repo/" + url[start:end]),
+		home:   fs.BgoHomeWithDir(path.Join("repo", url[start:end])),
 		branch: branch,
 	}
 }
