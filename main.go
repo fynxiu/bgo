@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/fynxiu/bgo/gitignore"
 	"github.com/fynxiu/bgo/project"
 	"github.com/fynxiu/bgo/upgrade"
 )
@@ -18,9 +19,10 @@ var rootCmd = &cobra.Command{
 	Version: version,
 }
 
-func init()  {
+func init() {
 	rootCmd.AddCommand(project.CmdNew)
 	rootCmd.AddCommand(upgrade.CmdUpgrade)
+	rootCmd.AddCommand(gitignore.NewCmd())
 }
 
 func main() {
