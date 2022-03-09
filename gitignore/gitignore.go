@@ -16,9 +16,10 @@ import (
 )
 
 const gitignoreUrl = "https://github.com/github/gitignore.git"
-const (
-	flagDir      = "dir"
-	flagElements = "elements"
+
+var (
+	flagDir            string
+	flagIgnoreElements elements
 )
 
 type elements []string
@@ -40,14 +41,16 @@ func (e *elements) Type() string {
 }
 
 func NewCmd() *cobra.Command {
-	app, err := newApp()
-	if err != nil {
-		panic(err)
-	}
 	cmd := &cobra.Command{
 		Use:   "gitignore",
 		Short: "Geenerate .gitignore file",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			app, err := newApp()
+			app.flagDir = flagDir
+			app.flagIgnoreElements = flagIgnoreElements
+			if err != nil {
+				panic(err)
+			}
 			filepath := path.Join(app.flagDir, ".gitignore")
 			if _, err := os.Stat(filepath); !os.IsNotExist(err) {
 				log.Fatalf("%s already exists.", filepath)
@@ -62,8 +65,8 @@ func NewCmd() *cobra.Command {
 		},
 		Args: cobra.NoArgs,
 	}
-	cmd.Flags().StringVarP(&app.flagDir, flagDir, "d", ".", "directory of the workdir")
-	cmd.Flags().VarP(&app.flagIgnoreElements, flagElements, "e", "elements for the .gitgnore")
+	cmd.Flags().StringVarP(&flagDir, "dir", "d", ".", "directory of the workdir")
+	cmd.Flags().VarP(&flagIgnoreElements, "elements", "e", "elements for the .gitgnore")
 	return cmd
 }
 
