@@ -13,7 +13,7 @@ import (
 	"github.com/fatih/color"
 )
 
-const dirPerm =0o700
+const dirPerm = 0o700
 
 func BgoHomeWithDir(dir string) string {
 	home := path.Join(bgoHome(), dir)
@@ -83,7 +83,6 @@ func CopyDir(src, dst string, replaces, ignores []string) error {
 	return nil
 }
 
-
 func copyFile(src, dst string, replaces []string) error {
 	var err error
 	srcInfo, err := os.Stat(src)
@@ -112,4 +111,9 @@ func hasSets(name string, sets []string) bool {
 		}
 	}
 	return false
+}
+
+func FileExists(path string) bool {
+	_, err := os.Stat(path)
+	return !os.IsNotExist(err)
 }

@@ -1,5 +1,7 @@
 ## Golang
 */bin
+.fir.yml
+.firlog
 
 ## IDE
 */.vscode
@@ -7,4 +9,3 @@
 
 ## OS
 .DS_Store
-
