@@ -1,6 +1,7 @@
 package firlog
 
 import (
+	"encoding/hex"
 	"errors"
 	"io/ioutil"
 	"path"
@@ -67,12 +68,16 @@ func (f *FirLog) NoChange() bool {
 
 func (f *FirLog) ExeChangedServices(c *config.Config) ([]string, error) {
 	IsHashChanged := func(s config.Service, hash string) bool {
-		for _, exe := range f.Exes {
-			if exe.Name == s.Name {
-				exe.NewMD5 = hash
-				return exe.MD5 != hash
+		for i := range f.Exes {
+			if f.Exes[i].Name == s.Name {
+				f.Exes[i].NewMD5 = hash
+				return f.Exes[i].MD5 != hash
 			}
 		}
+		f.Exes = append(f.Exes, Exe{
+			Name:   s.Name,
+			NewMD5: hash,
+		})
 		return true
 	}
 	var services []string
@@ -81,7 +86,7 @@ func (f *FirLog) ExeChangedServices(c *config.Config) ([]string, error) {
 		if err != nil {
 			return nil, err
 		}
-		if IsHashChanged(s, string(hash)) {
+		if IsHashChanged(s, hex.EncodeToString(hash)) {
 			services = append(services, s.Name)
 		}
 	}

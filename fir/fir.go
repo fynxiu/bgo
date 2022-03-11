@@ -56,6 +56,10 @@ func Run(_ *cobra.Command, _ []string) {
 		log.Fatalf("failed to read %q, %v\n", logFilename, err)
 		goto build
 	}
+
+	// overwrites .firlog
+	defer firLog.Overwrite(logFilename)
+
 	if firLog.NeedBuildAll() {
 		goto build
 	}
@@ -97,9 +101,6 @@ build:
 			log.Fatalf("docker process failed, %v", err)
 		}
 	}
-
-	// overwrites .firlog
-	firLog.Overwrite(logFilename)
 
 	log.Println("fir done.")
 }
