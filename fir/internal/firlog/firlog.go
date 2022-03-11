@@ -66,17 +66,23 @@ func (f *FirLog) NoChange() bool {
 }
 
 func (f *FirLog) ExeChangedServices(c *config.Config) ([]string, error) {
+	IsHashChanged := func(s config.Service, hash string) bool {
+		for _, exe := range f.Exes {
+			if exe.Name == s.Name {
+				exe.NewMD5 = hash
+				return exe.MD5 != hash
+			}
+		}
+		return true
+	}
 	var services []string
 	for _, s := range c.Services {
 		hash, err := hash.MD5File(path.Join(c.BuildPath, s.Name))
 		if err != nil {
 			return nil, err
 		}
-		for _, exe := range f.Exes {
-			if exe.Name == s.Name && exe.MD5 != string(hash) {
-				services = append(services, s.Name)
-			}
-			exe.NewMD5 = string(hash)
+		if IsHashChanged(s, string(hash)) {
+			services = append(services, s.Name)
 		}
 	}
 	return services, nil

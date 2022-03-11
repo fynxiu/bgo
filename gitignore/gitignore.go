@@ -61,6 +61,7 @@ func NewCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			defer f.Close()
 			return app.generate(app.flagIgnoreElements, f)
 		},
 		Args: cobra.NoArgs,

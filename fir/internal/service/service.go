@@ -1,6 +1,7 @@
 package service
 
 import (
+	"log"
 	"os"
 	"path"
 	"strings"
@@ -12,12 +13,27 @@ import (
 )
 
 func ServicesToBuild(services []config.Service, changedFileList []string, excluded []string) ([]config.Service, error) {
+
 	// filter service exclusive changed files
 	_changedFileList := filterExcluded(excluded, filterNoSourceFiles(changedFileList))
 
+	log.Printf("remain: %v", _changedFileList)
 	// TODO: analyses go.mod
 	if shouldBuildAll(_changedFileList) {
 		return services, nil
+	}
+
+	var ret []config.Service
+	for _, x := range services {
+		for _, y := range changedFileList {
+			if x.IsEmbeded(y) {
+				ret = append(ret, x)
+				break
+			}
+		}
+	}
+	if len(ret) == len(services) {
+		return ret, nil
 	}
 
 	pathSet := set.NewSet()
@@ -33,7 +49,6 @@ func ServicesToBuild(services []config.Service, changedFileList []string, exclud
 	}
 
 	var servicesNeedAnalysis []config.Service
-	var ret []config.Service
 
 	for _, x := range services {
 		if !(pathSet.Contains(x.Path)) {
@@ -41,6 +56,9 @@ func ServicesToBuild(services []config.Service, changedFileList []string, exclud
 		} else {
 			ret = append(ret, x)
 		}
+	}
+	if len(ret) == len(services) {
+		return ret, nil
 	}
 
 	wd, err := os.Getwd()
@@ -55,6 +73,7 @@ func ServicesToBuild(services []config.Service, changedFileList []string, exclud
 	// remain changed files
 	// get service's import
 	changed := func(imports map[string]struct{}) bool {
+		// TODO: _changedFileList should remove service-specific entities
 		for _, x := range _changedFileList {
 			if _, ok := imports[path.Dir(x)]; ok {
 				return true

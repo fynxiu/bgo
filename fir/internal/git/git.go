@@ -10,15 +10,12 @@ const (
 	headCommit = "HEAD"
 )
 
-func GetHeadHash() (string, error) {
-	cmd := exec.Command("git", "rev-parse", headCommit)
-	cmd.Stderr = os.Stderr
+func GetVersion() (string, error) {
+	return gitRun("describe", "--tags")
+}
 
-	output, err := cmd.Output()
-	if err != nil {
-		return "", err
-	}
-	return strings.TrimSpace(string(output)), nil
+func GetHeadHash() (string, error) {
+	return gitRun("rev-parse", headCommit)
 }
 
 func ChangedFileList(commit string) ([]string, error) {
@@ -29,13 +26,20 @@ func ChangedFileList(commit string) ([]string, error) {
 func changedFilefList(prevCommit, currCommit string) ([]string, error) {
 	prevCommit = strings.TrimSpace(prevCommit)
 	currCommit = strings.TrimSpace(currCommit)
-	cmd := exec.Command("git", "diff", "--name-only", prevCommit, currCommit)
+	output, err := gitRun("diff", "--name-only", prevCommit, currCommit)
+	if err != nil {
+		return nil, err
+	}
+	return strings.Split(output, "\n"), nil
+}
+
+func gitRun(args ...string) (string, error) {
+	cmd := exec.Command("git", args...)
 	cmd.Stderr = os.Stderr
 
 	output, err := cmd.Output()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-
-	return strings.Split(strings.TrimSpace(string(output)), "\n"), nil
+	return strings.TrimSpace(string(output)), nil
 }

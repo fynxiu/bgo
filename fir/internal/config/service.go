@@ -8,8 +8,10 @@ import (
 type Service struct {
 	Name         string
 	Path         string   // should be relative path without './'
-	Relatives    []string // should be relative path without './'
+	Relatives    []string // docker build relatives, eg., config, asset, etc.
+	Embeded      []string // go embeded files, affects go build
 	BuildCommand []string `yaml:"buildCommand"`
+	Dockerfile   string   // dockerfile path
 }
 
 func (s Service) String() string {
@@ -30,7 +32,16 @@ func (s Service) validate() error {
 
 func (s Service) IsRelative(filename string) bool {
 	for _, x := range s.Relatives {
-		if x == filename || strings.HasPrefix(filename, x) {
+		if strings.HasPrefix(filename, x) {
+			return true
+		}
+	}
+	return false
+}
+
+func (s Service) IsEmbeded(filename string) bool {
+	for _, x := range s.Embeded {
+		if strings.HasPrefix(filename, x) {
 			return true
 		}
 	}

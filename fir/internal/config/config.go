@@ -13,11 +13,14 @@ var (
 )
 
 type Config struct {
-	Dockerizing bool
-	BuildAll    bool     `yaml:"buildAll"`
-	BuildPath   string   `yaml:"buildPath"`
-	Excluded    []string // must be relative path without './'
-	Services    []Service
+	Project        string // procject name
+	Dockerizing    bool
+	BuildAll       bool     `yaml:"buildAll"`
+	BuildPath      string   `yaml:"buildPath"`
+	Excluded       []string // must be relative path without './'
+	Services       []Service
+	DockerfileDir  string          `yaml:"dockerfileDir"` // where to find Dockerfile, DockerfileDir/ServiceName/Dockerfile
+	AliyunRegistry *AliyunRegistry `yaml:"aliyunRegistry"`
 }
 
 func FromFile(filename string) (*Config, error) {

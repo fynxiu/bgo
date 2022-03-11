@@ -5,6 +5,7 @@ import (
 
 	"github.com/fynxiu/bgo/fir/internal/build"
 	"github.com/fynxiu/bgo/fir/internal/config"
+	"github.com/fynxiu/bgo/fir/internal/docker"
 	"github.com/fynxiu/bgo/fir/internal/firlog"
 	"github.com/fynxiu/bgo/fir/internal/git"
 	"github.com/fynxiu/bgo/fir/internal/service"
@@ -76,7 +77,7 @@ func Run(_ *cobra.Command, _ []string) {
 
 build:
 	log.Printf("build services, %v", services)
-	if err = build.Build(services); err != nil {
+	if err = build.Build(services, c.BuildPath); err != nil {
 		log.Fatalf("failed to build serives %v, %v\n", services, err)
 	}
 
@@ -92,7 +93,9 @@ build:
 		// if dockerizing enabled, do docker build
 		// should ignore unchanged artifacts
 		// should tag images properly
-
+		if err := docker.Build(ss, c); err != nil {
+			log.Fatalf("docker process failed, %v", err)
+		}
 	}
 
 	// overwrites .firlog
