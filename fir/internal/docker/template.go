@@ -15,7 +15,7 @@ ENV TZ Asia/Shanghai
 WORKDIR /app
 COPY {{ .BuildPath }} /app/{{ .ServiceName }}
 
-CMD ["./{{ .ServiceName }}"]
+CMD ["/app/{{ .ServiceName }}"]
 `
 
 // defaultDockerfile write default Dockerfile to filename
