@@ -72,7 +72,11 @@ func build(service config.Service, c *config.Config, registry Registry) error {
 		return err
 	}
 
-	return runDockerPush(imageName)
+	if err := runDockerPush(versionTag); err != nil {
+		return err
+	}
+
+	return runDockerPush(devTag)
 }
 
 func runDockerPush(imageName string) error {
