@@ -45,15 +45,15 @@ func Run(_ *cobra.Command, _ []string) {
 	}
 	services := c.Services
 
-	// build all
-	if c.BuildAll {
-		goto build
-	}
-
 	// read .firlog
 	firLog, err = firlog.FromFile(logFilename)
 	if err != nil {
 		log.Fatalf("failed to read %q, %v\n", logFilename, err)
+		goto build
+	}
+
+	// build all
+	if c.BuildAll {
 		goto build
 	}
 
