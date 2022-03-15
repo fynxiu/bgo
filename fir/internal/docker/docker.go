@@ -59,10 +59,12 @@ func build(service config.Service, c *config.Config, registry Registry) error {
 		return err
 	}
 
-	imageName := fmt.Sprintf("%s/%s-%s:%s", registry.Namesapce(), c.Project, service.Name, version)
+	imageName := fmt.Sprintf("%s/%s-%s", registry.Namesapce(), c.Project, service.Name)
+	versionTag := fmt.Sprintf("%s:%s", imageName, version)
+	devTag := fmt.Sprintf("%s:dev", imageName)
 
 	// run docker build
-	if err := runDockerBuild(imageName, dockerfilePath); err != nil {
+	if err := runDockerBuild(dockerfilePath, versionTag, devTag); err != nil {
 		return err
 	}
 
@@ -80,8 +82,9 @@ func runDockerPush(imageName string) error {
 	return cmd.Run()
 }
 
-func runDockerBuild(imageName, dockerfilePath string) error {
-	cmd := exec.Command("docker", "build", "-t", imageName, "-f", dockerfilePath, ".")
+func runDockerBuild(dockerfilePath string, versionTag, devTag string) error {
+
+	cmd := exec.Command("docker", "build", "-t", versionTag, "-t", devTag, "-f", dockerfilePath, ".")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
