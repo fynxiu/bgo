@@ -11,6 +11,7 @@ type Service struct {
 	Relatives    []string // docker build relatives, eg., config, asset, etc.
 	Embeded      []string // go embeded files, affects go build
 	BuildCommand []string `yaml:"buildCommand"`
+	Env          []string // env, eg., "CGO_ENABLED=1", etc.
 	Dockerfile   string   // dockerfile path
 }
 
