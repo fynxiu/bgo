@@ -35,7 +35,7 @@ func build(service config.Service, buildPath string) error {
 		buildComand = []string{"go", "build", "-ldflags", "-s -w", "-o", buildPath, servicePath}
 	}
 	cmd := exec.Command(buildComand[0], buildComand[1:]...)
-	env := []string{"GO111MODULE=on", "GOPROXY=https://goproxy.io,direct", "CGO_ENABLED=0"}
+	env := []string{"GO111MODULE=on", "GOPROXY=https://goproxy.cn,direct", "CGO_ENABLED=0"}
 	cmd.Env = append(env, os.Environ()...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

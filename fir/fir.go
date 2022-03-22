@@ -51,14 +51,13 @@ func Run(_ *cobra.Command, _ []string) {
 		log.Fatalf("failed to read %q, %v\n", logFilename, err)
 		goto build
 	}
+	// overwrites .firlog
+	defer firLog.Overwrite(logFilename)
 
 	// build all
 	if c.BuildAll {
 		goto build
 	}
-
-	// overwrites .firlog
-	defer firLog.Overwrite(logFilename)
 
 	if firLog.NeedBuildAll() {
 		goto build
