@@ -40,6 +40,10 @@ func (s Service) IsRelative(filename string) bool {
 	return false
 }
 
+func (s Service) IsDockerfile(filename string) bool {
+	return s.Dockerfile == filename
+}
+
 func (s Service) IsEmbeded(filename string) bool {
 	for _, x := range s.Embeded {
 		if strings.HasPrefix(filename, x) {

@@ -114,6 +114,15 @@ func ServicesToDockerize(services []config.Service, changedFileList []string, ex
 		}
 	}
 
+	// Dockerfile 更改，需要重新 build
+	for _, x := range changedFileList {
+		for _, y := range services {
+			if y.IsDockerfile(x) {
+				ss = append(ss, y)
+			}
+		}
+	}
+
 	return ss
 }
 
