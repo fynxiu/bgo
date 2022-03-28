@@ -92,6 +92,11 @@ build:
 		ss := service.ServicesToDockerize(services, changedFileList, exeChangedServices)
 		log.Printf("services to dockerize, %v\n", ss)
 
+		// rebuild services again to embed version info
+		if err := build.BuildWithVersion(ss, c.BuildPath); err != nil {
+			log.Fatalf("BuildWithVersion failed, %v", err)
+		}
+
 		// find related service according config and dependency graph, do build (given qualified services)
 		// if dockerizing enabled, do docker build
 		// should ignore unchanged artifacts

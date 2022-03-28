@@ -8,6 +8,11 @@ import (
 	"github.com/fynxiu/bgo/internal/goparser"
 )
 
+var (
+	version   string
+	buildTime string
+)
+
 func must(err error) {
 	if err != nil {
 		panic(err)
@@ -16,6 +21,7 @@ func must(err error) {
 
 func main() {
 	var err error
+	fmt.Printf("version=%s, buildTime=%s", version, buildTime)
 
 	modName, err := gomod.ModulePath("/home/fyn/Workspace/bntl/bgo")
 	must(err)

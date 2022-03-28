@@ -1,25 +1,32 @@
 package build
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/fynxiu/bgo/fir/internal/config"
+	"github.com/fynxiu/bgo/fir/internal/git"
 )
 
 const (
 	defaultBuildPath = "build"
 )
 
-func Build(services []config.Service, buildPath string) error {
+func BuildWithVersion(services []config.Service, buildPath string) error {
+	version, err := git.GetVersion()
+	if err != nil {
+		return err
+	}
 	_buildPath := buildPath
 	if _buildPath == "" {
 		buildPath = defaultBuildPath
 	}
 	for _, x := range services {
-		if err := build(x, _buildPath); err != nil {
+		if err := build(x, _buildPath, version); err != nil {
 			return err
 		}
 	}
@@ -27,12 +34,31 @@ func Build(services []config.Service, buildPath string) error {
 	return nil
 }
 
-func build(service config.Service, buildPath string) error {
+func Build(services []config.Service, buildPath string) error {
+	_buildPath := buildPath
+	if _buildPath == "" {
+		buildPath = defaultBuildPath
+	}
+	for _, x := range services {
+		if err := build(x, _buildPath, ""); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func build(service config.Service, buildPath string, version string) error {
 	var buildComand = service.BuildCommand
 	buildPath = normalizeBuildPath(buildPath, service.Name)
 	servicePath := normalizeServicePath(service.Path)
+	ldflags := "-s -w"
+	if version != "" {
+		ldflags = fmt.Sprintf("%s -X main.version=%s -X main.buildTime=%s", ldflags, version, time.Now().Format(time.RFC3339))
+	}
 	if buildComand == nil || len(buildComand) == 0 {
-		buildComand = []string{"go", "build", "-ldflags", "-s -w", "-o", buildPath, servicePath}
+
+		buildComand = []string{"go", "build", "-ldflags", ldflags, "-o", buildPath, servicePath}
 	}
 	cmd := exec.Command(buildComand[0], buildComand[1:]...)
 	env := []string{"GO111MODULE=on", "GOPROXY=https://goproxy.cn,direct", "CGO_ENABLED=0"}
