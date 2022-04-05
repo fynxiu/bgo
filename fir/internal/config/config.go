@@ -21,6 +21,7 @@ type Config struct {
 	Services       []Service
 	DockerfileDir  string          `yaml:"dockerfileDir"` // where to find Dockerfile, DockerfileDir/ServiceName/Dockerfile
 	AliyunRegistry *AliyunRegistry `yaml:"aliyunRegistry"`
+	UpdatedHooks   []UpdatedHook   `json:"updateHooks" yaml:"updateHooks"`
 }
 
 func FromFile(filename string) (*Config, error) {

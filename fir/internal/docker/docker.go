@@ -2,6 +2,7 @@ package docker
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"os/exec"
 	"path"
@@ -28,6 +29,29 @@ func Build(services []config.Service, c *config.Config) error {
 	for _, x := range services {
 		if err := build(x, c, registgry); err != nil {
 			return err
+		}
+	}
+
+	if len(services) > 0 {
+		var req *http.Request
+		var err error
+		for _, x := range c.UpdatedHooks {
+			req, err = http.NewRequest(http.MethodPost, x.URL, nil)
+			if err != nil {
+				return err
+			}
+			for k, vs := range x.Header {
+				for _, v := range vs {
+					req.Header.Set(k, v)
+				}
+			}
+			resp, err := http.DefaultClient.Do(req)
+			if err != nil {
+				return err
+			}
+			if resp.StatusCode != http.StatusOK {
+				return fmt.Errorf("UpdatedHooks failed, %v, status_code=%d", x, resp.StatusCode)
+			}
 		}
 	}
 	return nil

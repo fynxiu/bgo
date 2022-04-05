@@ -32,6 +32,12 @@ func Test_jsonUnmarshaller(t *testing.T) {
 								"r2"
 							]
 						}
+					],
+					"updateHooks": [
+						{
+							"url":"http://foo.bar/biz",
+							"Header":{"foo":["bar"]}
+						}
 					]
 				}`),
 				actual: &Config{},
@@ -45,6 +51,14 @@ func Test_jsonUnmarshaller(t *testing.T) {
 							Path: "fooPath",
 							Relatives: []string{
 								"r1", "r2",
+							},
+						},
+					},
+					UpdatedHooks: []UpdatedHook{
+						{
+							URL: "http://foo.bar/biz",
+							Header: map[string][]string{
+								"foo": {"bar"},
 							},
 						},
 					},
@@ -91,6 +105,10 @@ services:
     relatives:
       - r1
       - r2
+updateHooks:
+  - url: http://foo.bar/biz
+    header:
+      foo: [bar]
 `),
 				actual: &Config{},
 				expected: &Config{
@@ -103,6 +121,14 @@ services:
 							Path: "fooPath",
 							Relatives: []string{
 								"r1", "r2",
+							},
+						},
+					},
+					UpdatedHooks: []UpdatedHook{
+						{
+							URL: "http://foo.bar/biz",
+							Header: map[string][]string{
+								"foo": {"bar"},
 							},
 						},
 					},
