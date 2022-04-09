@@ -51,8 +51,6 @@ func Run(_ *cobra.Command, _ []string) {
 		log.Fatalf("failed to read %q, %v\n", logFilename, err)
 		goto build
 	}
-	// overwrites .firlog
-	defer firLog.Overwrite(logFilename)
 
 	// build all
 	if c.BuildAll {
@@ -83,6 +81,8 @@ build:
 	if err = build.Build(services, c.BuildPath); err != nil {
 		log.Fatalf("failed to build serives %v, %v\n", services, err)
 	}
+	// overwrites .firlog
+	firLog.Overwrite(logFilename)
 
 	if c.Dockerizing {
 		exeChangedServices, err := firLog.ExeChangedServices(c)
