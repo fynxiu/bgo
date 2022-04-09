@@ -81,15 +81,16 @@ build:
 	if err = build.Build(services, c.BuildPath); err != nil {
 		log.Fatalf("failed to build serives %v, %v\n", services, err)
 	}
+
+	exeChangedServices, err := firLog.ExeChangedServices(c)
+	if err != nil {
+		log.Fatalf("ExeChangedServices failed, %v", err)
+	}
+	log.Printf("ExeChanged services: %v", exeChangedServices)
 	// overwrites .firlog
 	firLog.Overwrite(logFilename)
 
 	if c.Dockerizing {
-		exeChangedServices, err := firLog.ExeChangedServices(c)
-		if err != nil {
-			log.Fatalf("ExeChangedServices failed, %v", err)
-		}
-		log.Printf("ExeChanged services: %v", exeChangedServices)
 		ss := service.ServicesToDockerize(services, changedFileList, exeChangedServices)
 		log.Printf("services to dockerize, %v\n", ss)
 

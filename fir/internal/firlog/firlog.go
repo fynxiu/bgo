@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"io/ioutil"
+	"log"
 	"path"
 	"strings"
 
@@ -94,6 +95,7 @@ func (f *FirLog) ExeChangedServices(c *config.Config) ([]string, error) {
 }
 
 func (f *FirLog) Overwrite(filename string) error {
+	log.Println("Overwriting .firlog")
 	f.Commit = f.CurrentCommit
 	for i := range f.Exes {
 		f.Exes[i].MD5 = f.Exes[i].NewMD5
