@@ -89,6 +89,7 @@ build:
 		if err != nil {
 			log.Fatalf("ExeChangedServices failed, %v", err)
 		}
+		log.Printf("ExeChanged services: %v", exeChangedServices)
 		ss := service.ServicesToDockerize(services, changedFileList, exeChangedServices)
 		log.Printf("services to dockerize, %v\n", ss)
 

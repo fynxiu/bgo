@@ -11,7 +11,7 @@ import (
 	"github.com/fynxiu/bgo/upgrade"
 )
 
-const version = "0.0.1"
+const version = "0.2.2"
 
 var rootCmd = &cobra.Command{
 	Use:     "bgo",
