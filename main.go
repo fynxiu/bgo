@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/fynxiu/bgo/charset"
 	"github.com/fynxiu/bgo/fir"
 	"github.com/fynxiu/bgo/gitignore"
 	"github.com/fynxiu/bgo/project"
@@ -25,6 +26,7 @@ func init() {
 	rootCmd.AddCommand(upgrade.CmdUpgrade)
 	rootCmd.AddCommand(gitignore.NewCmd())
 	rootCmd.AddCommand(fir.CmdFir)
+	rootCmd.AddCommand(charset.CmdCharset())
 }
 
 func main() {

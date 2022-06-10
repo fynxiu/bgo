@@ -20,6 +20,19 @@
       "request": "launch",
       "mode": "auto",
       "program": "./cmd/goimports/main.go"
-    }
+    },
+    {
+      "name": "Launch addbom",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "main.go",
+      "args": [
+        "charset",
+        "addbom",
+        "--dir",
+        "/tmp/bgo-charset",
+      ]
+    },
   ]
 }
